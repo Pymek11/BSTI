@@ -60,16 +60,16 @@ plt.hist(encoded_numbers, bins=len(set(encoded_numbers)), color='skyblue', edgec
 plt.xticks([])
 plt.xlabel('Numbers from lowest to highest')
 plt.ylabel('Number of appearances')
-plt.title('Frequency of Numbers Used in Encoded Text')
+plt.title('Frequency of Numbers Used in Homofonic cyphr')
 plt.xticks(rotation=90)
 plt.show()
 
 decoded_tekst = [tekst[i:i+1] for i in range(0, len(tekst), 1)]
 plt.figure()
 plt.hist(decoded_tekst, bins=len(set(encoded_numbers)), color='skyblue', edgecolor='black')
-plt.xlabel('Litery')
-plt.ylabel('Liczba wystąpień')
-plt.title('Liczba podstawien dla szyfru monoalfabetycznego')
+plt.xlabel('Letters')
+plt.ylabel('Number of appearances')
+plt.title('Number of letter appearing in Monoalphabetical cyphr')
 plt.show()
 
 print("Original text:")
