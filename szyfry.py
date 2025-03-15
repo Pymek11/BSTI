@@ -44,6 +44,9 @@ def decode_text(encoded_text, code_dict):
             decoded_text += '?'
     return decoded_text
 
+# for letter, numbers in alphabet_dict.items():
+#     print(f"{letter}: {', '.join(numbers)}") ## sprawdzenie tabeli liczb
+
 tekst = "tematy bezpieczenstwa i niebezpieczenstwa w systemach teleinformatycznych poruszamy na laboratoriach"
 numerical_tekst = encode_text(tekst, alphabet_dict)
 decoded_tekst = decode_text(numerical_tekst, alphabet_dict)
