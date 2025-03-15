@@ -1,4 +1,5 @@
 import random
+import matplotlib.pyplot as plt
 
 polish_alphabet_freq = {
     'a': 10.503, 'i': 8.812, 'o': 8.340, 'e': 7.352, 'z': 6.998, 'n': 6.223,
@@ -50,6 +51,26 @@ def decode_text(encoded_text, code_dict):
 tekst = "tematy bezpieczenstwa i niebezpieczenstwa w systemach teleinformatycznych poruszamy na laboratoriach"
 numerical_tekst = encode_text(tekst, alphabet_dict)
 decoded_tekst = decode_text(numerical_tekst, alphabet_dict)
+
+
+encoded_numbers = [numerical_tekst[i:i+3] for i in range(0, len(numerical_tekst), 3)]
+encoded_tekst = encoded_numbers.sort()
+plt.figure()
+plt.hist(encoded_numbers, bins=len(set(encoded_numbers)), color='skyblue', edgecolor='black')
+plt.xticks([])
+plt.xlabel('Numbers from lowest to highest')
+plt.ylabel('Number of appearances')
+plt.title('Frequency of Numbers Used in Encoded Text')
+plt.xticks(rotation=90)
+plt.show()
+
+decoded_tekst = [tekst[i:i+1] for i in range(0, len(tekst), 1)]
+plt.figure()
+plt.hist(decoded_tekst, bins=len(set(encoded_numbers)), color='skyblue', edgecolor='black')
+plt.xlabel('Litery')
+plt.ylabel('Liczba wystąpień')
+plt.title('Liczba podstawien dla szyfru monoalfabetycznego')
+plt.show()
 
 print("Original text:")
 print(tekst)
