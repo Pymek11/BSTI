@@ -1,89 +1,56 @@
 import random
 
-alphabet_dict = {letter: [] for letter in 'abcdefghijklmnopqrstuvwxyz '}
+polish_alphabet_freq = {
+    'a': 10.503, 'i': 8.812, 'o': 8.340, 'e': 7.352, 'z': 6.998, 'n': 6.223,
+    's': 4.911, 'c': 4.520, 'r': 4.423, 'w': 4.208, 'y': 3.998, 'd': 2.854,
+    'k': 2.798, 'm': 2.724, 't': 2.452, 'p': 2.083, 'u': 1.990, 'j': 1.836,
+    'l': 1.821, 'g': 1.731, 'b': 1.134, 'h': 0.940, 'f': 0.260, 'v': 0.034, ## przypisanie do liter ich odpowiadajacayh procentow wystepowania
+    'q': 0.014, 'x': 0.014, ' ': 15.000
+}
 
-liczby = []
-for i in range(0, 988):
-    liczby.append(f"{i:03}")
+total_codes = 988
+all_codes = [f"{i:03}" for i in range(total_codes)] ## zapis liczby 1 jako 001 itd
+random.shuffle(all_codes)
 
-letters = list('abcdefghijklmnopqrstuvwxyz ')
-letter_index = 0
+alphabet_dict = {letter: [] for letter in polish_alphabet_freq}  ## arraye wszystkich liter
 
-while len(liczby) > 0:
-    random_number = random.choice(liczby)
-    liczby.remove(random_number)
+for letter in polish_alphabet_freq:
+    num_codes = round((polish_alphabet_freq[letter] / 100) * total_codes)
+    if len(all_codes) < num_codes:
+        num_codes = len(all_codes)
+    alphabet_dict[letter] = [all_codes.pop() for _ in range(num_codes)]  ##  zapis losowych liczb do arrayi , ilosc liczb wpisywana za pomoca czestotliwosci
 
-    current_letter = letters[letter_index]
+if all_codes:
+    alphabet_dict[' '] += all_codes ## wpis do " " -( spacji ) pozostalych liczb
 
-    alphabet_dict[current_letter].append(random_number)
+def encode_text(text, code_dict):
+    encoded_text = ""
+    for char in text:
+        if char in code_dict and code_dict[char]:
+            encoded_text += random.choice(code_dict[char])  ##zakodowanie tekstu w liczby dopasowane w arrayiu
+        else:
+            encoded_text += "000"
+    return encoded_text
 
-    letter_index = (letter_index + 1) % len(letters)
-
-print("Contents of alphabet_dict:")
-for letter, numbers in alphabet_dict.items():
-    print(f"{letter}: {numbers}")
+def decode_text(encoded_text, code_dict):
+    decoded_text = ""
+    for i in range(0, len(encoded_text), 3):
+        code = encoded_text[i:i+3]
+        for letter, codes in code_dict.items():  ## dekodowanie tekstu
+            if code in codes:
+                decoded_text += letter
+                break
+        else:
+            decoded_text += '?'
+    return decoded_text
 
 tekst = "tematy bezpieczenstwa i niebezpieczenstwa w systemach teleinformatycznych poruszamy na laboratoriach"
+numerical_tekst = encode_text(tekst, alphabet_dict)
+decoded_tekst = decode_text(numerical_tekst, alphabet_dict)
 
-numerical_tekst = ""
-
-for char in tekst:
-    if char in alphabet_dict and len(alphabet_dict[char]) > 0:
-        random_number = random.choice(alphabet_dict[char])
-        numerical_tekst += str(random_number)
-    else:
-        numerical_tekst += '000'
-
-print("Resulting string of random numbers:")
+print("Original text:")
+print(tekst)
+print("\nEncoded numerical text:")
 print(numerical_tekst)
-
-inverse_tekst = ""
-i = 0
-while i < len(numerical_tekst):
-    num_str = numerical_tekst[i:i+3]
-    for letter, numbers in alphabet_dict.items():
-        if num_str in numbers:
-            inverse_tekst += letter
-            break
-    i += 3
-
-print("Numerical tekst:")
-print(numerical_tekst)
-
-print("(converted back to letters):")
-print(inverse_tekst)
-
-# WXQOWK LXCFRXBCXUAWJO R URXLXCFRXBCXUAWJO J AKAWXQOBM WXNXRUSDEQOWKBCUKBM FDEPACOQK UO NOLDEOWDEROBM
-#
-# x=a?e?i?o?
-#
-# o=a?e?i?o?
-#
-# r=i?w?
-#
-# j=i?w?
-#
-# test1
-# o=a, j=w? ,r=i? ,x=e?
-#
-# z Ua -> na?
-# U=n
-#
-# b/c=o - > b=o?
-# WeQaWK LeCFieBCenAWwa i nieLeCFieBCenAWwa w AKAWXQaBM WXNXinSDeQaWKBCUKBM FDEPACOQK na NaLDEaWDEiaBM
-# 			niebezpieczenstwa
-# 			L=B C=Z F=P B=C C=Z A=S W=T
-# teQatk bezpieczenstwa i niebezpieczenstwa w systemach teleninformatycznych
-# tematy
-# Q=m
-# k=Y
-# tematy bezpieczenstwa i niebezpieczenstwa w systemach teleninformatycznych pDEPszOmy na NabDEatDEiach
-# M=h
-#
-#
-# abiwenobzpcstmyh
-# tematy bezpieczenstwa i niebezpieczenstwa w systemach teleninformatycznych porPszOmy na laboratoriach
-# D=O
-# E=r
-#
-# tematy bezpieczenstwa i niebezpieczenstwa w systemach teleinformatycznych poruszamy na laboratoriach
+print("\nDecoded text:")
+print(decoded_tekst)
