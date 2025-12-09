@@ -1,1 +1,1 @@
-# BezpieczenstwoSieciTeleinformatycznich
+# BezpieczenstwoSieciTeleinformatycznych
